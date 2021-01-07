@@ -3,9 +3,11 @@ import { useState } from 'react';
 import DFS from './DFS';
 import FirstLoop from './FirstLoop';
 import './Figures.css';
+import CheckForEquals from './CheckForEquals';
 
 const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score }) => {
     const [color, setColor] = useState("matrix__col text-dark");
+    const [steps, setSteps] = useState(0);
 
     const CPUTurn = () => {
         let CPU = gameState.matrix;
@@ -14,6 +16,8 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
+        } else if (CheckForEquals(CPU)) {
+            return "Equals"
         }
 
 
@@ -40,11 +44,15 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
+        } else if (resultStr != "Continue") {
+            return "Equals"
+        } else if (CheckForEquals(CPU)) {
+            return "Equals"
         }
 
-        if (couner == 30) {
-            return "CPU WIN"
-        }
+        //if (couner == 30) {
+        //    return "CPU WIN"
+        //}
 
         return "Continue"
     }
@@ -88,6 +96,11 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
                         user: scr,
                         cpu: cpuScore,
                     });
+
+                    setGameState({
+                        matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+                    });
+                } else if (res == "Equals") {
 
                     setGameState({
                         matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],

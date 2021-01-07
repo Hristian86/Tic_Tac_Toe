@@ -12,9 +12,12 @@ const Game = () => {
         cpu: 0,
     });
 
-    //let matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-
-    //matrix[2][0] = 1;
+    const Reset = () => {
+        const matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+        setGameState({
+            matrix: matrix,
+        })
+    }
 
     return <div className="container d-flex justify-content-center bg-light">
 
@@ -27,6 +30,8 @@ const Game = () => {
                 <br />
                 cpu score: {score?.cpu}
             </div>
+
+            <button className="btn btn-success" onClick={Reset}>Reset</button>
 
             {gameState?.matrix.map((row, index) => {
                 return <Rows
