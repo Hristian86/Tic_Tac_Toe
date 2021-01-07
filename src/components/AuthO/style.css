@@ -1,0 +1,66 @@
+.log-out {
+    height:800px;
+}
+
+.loading {
+    height:700px;
+}
+
+.backgrounds {
+    height: 800px;
+    background: url("https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?cs=srgb&dl=pexels-lumn-167699.jpg&fm=jpg")fixed;
+    /*background-position-y: -300px;*/
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.image-holder{
+    margin-left:20px;
+    height:500px;
+    width:500px;
+}
+
+.userInput, .passwordInput {
+    margin-top: 8px;
+    margin-bottom: 20px;
+    margin-left:360px;
+    width: 400px !important;
+    height: 35px !important;
+    text-align: center!important;
+}
+
+.buttons {
+    height: 50px;
+    width: 398px;
+}
+
+.registerForm {
+    margin-top: 60px;
+}
+
+.register__link {
+    text-decoration: none!important;
+}
+
+@media only screen and (max-width: 768px) {
+    .image-holder {
+        margin-left: 0px;
+        height: 350px;
+        width: 350px;
+    }
+
+    .userInput, .passwordInput {
+        margin-top: 8px;
+        margin:0px;
+        margin-bottom: 20px;
+        width: 350px !important;
+        height: 35px !important;
+        text-align: center;
+    }
+
+    .buttons {
+        height: 50px;
+        width: 350px;
+        margin-bottom:30px;
+    }
+}
