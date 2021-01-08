@@ -46,7 +46,7 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
             }
         }
 
-        resultStr = FirstLoop(CPU);
+        resultStr = FirstLoop(CPU, cpuSymbol, userSymbol, isSymbolAdded);
         if (CheckForEquals(CPU)) {
             return "Equals"
         }

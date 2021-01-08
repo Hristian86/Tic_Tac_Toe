@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Rows from './Rows/Rows';
 import './Game.css';
 import ResetMatrix from './ResetMatrix/ResetMatrix';
+import OnlineConnectionWithSignalR from '../../components/SignaR/OnlineConnectionWithSignalR';
 
 var matrix = [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]];
 const startField = "0";
@@ -31,6 +32,7 @@ const Game = () => {
 
     return <div className="container d-flex justify-content-center bg-light">
 
+        {/*<OnlineConnectionWithSignalR />*/}
 
         <div className="game__options">
 
