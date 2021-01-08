@@ -2,13 +2,15 @@ import React from 'react';
 import Figures from '../Figures/Figures';
 import './Rows.css';
 
-const Rows = ({ index, row, setGameState, gameState, setScore, score, userSymbol, cpuSymbol}) => {
+const Rows = ({ index, row, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars}) => {
     
     return <p
         className="matrix__row"
         key={index}>
         {row.map((col, innerIndex) => {
             return <Figures
+                positionParametars={positionParametars}
+                Play={Play}
                 userSymbol={userSymbol}
                 cpuSymbol={cpuSymbol}
                 score={score}

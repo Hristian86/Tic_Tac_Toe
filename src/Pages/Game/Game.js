@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import Rows from './Rows/Rows';
 import './Game.css';
 import ResetMatrix from './ResetMatrix/ResetMatrix';
-import OnlineConnectionWithSignalR from '../../components/SignaR/OnlineConnectionWithSignalR';
+import { useStateValue } from '../../components/ContextApi/StateProvider';
 
-var matrix = [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]];
 const startField = "0";
 const userSymbol = "X";
 const cpuSymbol = "Y";
 const winner = [];
 
-const Game = () => {
+const Game = ({ Play, positionParametars, matrix }) => {
+    const [{ fetchData }, dispatch] = useStateValue();
     const [gameState, setGameState] = useState({
         matrix: matrix,
         winner: winner,
@@ -23,16 +23,16 @@ const Game = () => {
 
     const Reset = () => {
         ResetMatrix(matrix, startField);
-
+        console.log(fetchData);
         setGameState({
             matrix: matrix,
             winner: winner,
         })
     }
 
-    return <div className="container d-flex justify-content-center bg-light">
+    return <div className="container d-flex justify-content-center bg-light game__container">
 
-        {/*<OnlineConnectionWithSignalR />*/}
+        
 
         <div className="game__options">
 
@@ -49,6 +49,8 @@ const Game = () => {
 
             {gameState?.matrix.map((row, index) => {
                 return <Rows
+                    positionParametars={positionParametars}
+                    Play={Play}
                     userSymbol={userSymbol}
                     cpuSymbol={cpuSymbol}
                     score={score}

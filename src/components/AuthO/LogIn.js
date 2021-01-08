@@ -74,6 +74,9 @@ const Login = (props) => {
                     // Setting cookie user
                     user.user ? setCookieUser(user.user) :
                         setCookieUser(user.email);
+
+                    setCookie('id', user.id, 5);
+
                     setCookie('email', user.email, 5);
                     setCookieToken(user.token);
                     setCookie('expiration', user.expiration, 1);
@@ -106,11 +109,14 @@ const Login = (props) => {
 
                 } else if (user.error) {
                     error.innerHTML = user.error;
-                } else {
+                } else if (user?.status == 401 || user.title == "Unauthorized"){
                     setState({
                         buttonPresed: false
                     });
+
                     error.innerHTML = "Wrong email or password";
+                } else {
+                    error.innerHTML = "Server error";
                 }
 
             } else {

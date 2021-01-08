@@ -1,0 +1,20 @@
+.chat__home {
+    position: fixed;
+    height: 600px;
+    overflow: scroll;
+}
+
+@media only screen and (max-width: 900px) {
+    .chat__home {
+        /*position: fixed;*/
+        position: relative;
+        top: 700px;
+        height: 600px;
+        overflow: scroll;
+    }
+
+    .game__container {
+        position: relative;
+        bottom: 550px;
+    }
+}

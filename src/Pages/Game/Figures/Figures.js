@@ -5,7 +5,12 @@ import FirstLoop from './FirstLoop';
 import './Figures.css';
 import CheckForEquals from './CheckForEquals';
 
-const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol }) => {
+const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars }) => {
+
+    let multyplayer = true;
+    if (positionParametars == null) {
+        multyplayer = false;
+    }
 
     const [color, setColor] = useState("matrix__col text-dark");
     const [steps, setSteps] = useState(0);
@@ -15,46 +20,56 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         const isSymbolAdded = [false];
         let CPU = gameState.matrix;
         let resultStr = FirstLoop(CPU, cpuSymbol, userSymbol, isSymbolAdded);
-        if (CheckForEquals(CPU)) {
-            return "Equals"
-        }
+
 
         if (resultStr == "END") {
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
         }
-        
 
+        if (CheckForEquals(CPU)) {
+            return "Equals"
+        }
 
-        let couner = 0;
-        while (couner < 30) {
-            couner += 1;
-            const cpuChoiseRow = Math.random() * 10;
-            const cpuChoiseCol = Math.random() * 10;
+        if (multyplayer) {
+            if (positionParametars != undefined && positionParametars != null) {
 
-            const row1 = (cpuChoiseRow % 2).toFixed(0);
-            const col1 = (cpuChoiseCol % 2).toFixed(0);
+                var position = positionParametars.split(", ");
+                CPU[position[0]][position[1]] = cpuSymbol;
+            }
+        } else {
 
-            if (CPU[row1][col1] != userSymbol && CPU[row1][col1] != cpuSymbol) {
-                CPU[row1][col1] = cpuSymbol;
-                setGameState({
-                    matrix: CPU,
-                    winner: gameState.winner,
-                });
-                break;
+            let couner = 0;
+            while (couner < 30) {
+                couner += 1;
+                const cpuChoiseRow = Math.random() * 10;
+                const cpuChoiseCol = Math.random() * 10;
+
+                const row1 = (cpuChoiseRow % 2).toFixed(0);
+                const col1 = (cpuChoiseCol % 2).toFixed(0);
+
+                if (CPU[row1][col1] != userSymbol && CPU[row1][col1] != cpuSymbol) {
+                    CPU[row1][col1] = cpuSymbol;
+                    setGameState({
+                        matrix: CPU,
+                        winner: gameState.winner,
+                    });
+                    break;
+                }
             }
         }
 
         resultStr = FirstLoop(CPU, cpuSymbol, userSymbol, isSymbolAdded);
-        if (CheckForEquals(CPU)) {
-            return "Equals"
-        }
+
 
         if (resultStr == "END") {
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
+        }
+        if (CheckForEquals(CPU)) {
+            return "Equals"
         }
 
         return "Continue"
@@ -62,6 +77,8 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
 
     const positionOnPush = () => {
         //console.log(index + " " + innerIndex);
+
+        Play(`${index}, ${innerIndex}`);
 
         let matr = gameState.matrix;
         if (matr[index][innerIndex] == cpuSymbol || matr[index][innerIndex] == userSymbol || gameState?.winner[0]?.length > 0) {
@@ -77,6 +94,7 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
 
             setTimeout(() => {
                 const res = CPUTurn();
+
                 const currMatrix = gameState.matrix;
                 // Put in state for winner.
                 if (res == "END") {

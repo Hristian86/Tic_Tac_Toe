@@ -3,13 +3,14 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\BaseUrl",
+    "\\src\\components\\AuthO",
+    "\\src\\components\\ContextApi",
+    "\\src\\components\\SignaR",
     "\\src\\Pages",
     "\\src\\Pages\\Game",
-    "\\src\\Pages\\Game\\Figures",
-    "\\src\\Pages\\Game\\Rows",
+    "\\src\\Pages\\Game\\ResetMatrix",
     "\\src\\Pages\\Home"
   ],
-  "SelectedNode": "\\src\\Pages\\Game\\Game.js",
+  "SelectedNode": "\\src\\Pages\\Game\\Figures\\Figures.js",
   "PreviewInSolutionExplorer": false
 }

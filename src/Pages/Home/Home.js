@@ -11,13 +11,15 @@ import propsy from '../../components/SendingProps';
 import login from '../../components/AuthO/LogIn';
 import getCookie from '../../components/Cookies/GetCookie';
 import Game from '../Game/Game';
+import OnlineConnectionWithSignalR from '../../components/SignaR/OnlineConnectionWithSignalR';
+import './Home.css';
 
 export const UserContext = createContext({ user: null });
 
 export default class Home extends Component {
     constructor(props) {
         super(props)
-        
+
         this.state = {
             user: null,
             loading: false,
@@ -75,10 +77,17 @@ export default class Home extends Component {
     render() {
         //let usr = this.state.user;
         //let fireQuery = new fireDB();
-        
+
         return (
             <div>
-                <Game />
+                <div className="chat__hom">
+                    <OnlineConnectionWithSignalR>
+
+                        
+
+                    </OnlineConnectionWithSignalR>
+                </div>
+
                 <div className="spacer"></div>
             </div>
         )
