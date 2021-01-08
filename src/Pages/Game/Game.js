@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import Rows from './Rows/Rows';
 import './Game.css';
+import ResetMatrix from './ResetMatrix/ResetMatrix';
+
+var matrix = [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]];
+const startField = "0";
+const userSymbol = "X";
+const cpuSymbol = "Y";
+const winner = [];
 
 const Game = () => {
     const [gameState, setGameState] = useState({
-        matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+        matrix: matrix,
+        winner: winner,
     });
 
     const [score, setScore] = useState({
@@ -13,17 +21,20 @@ const Game = () => {
     });
 
     const Reset = () => {
-        const matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+        ResetMatrix(matrix, startField);
+
         setGameState({
             matrix: matrix,
+            winner: winner,
         })
     }
 
     return <div className="container d-flex justify-content-center bg-light">
 
 
-
         <div className="game__options">
+
+            <h2 className="winner__holder">{gameState?.winner[0]}</h2>
 
             <div>
                 user score: {score?.user}
@@ -31,10 +42,13 @@ const Game = () => {
                 cpu score: {score?.cpu}
             </div>
 
+
             <button className="btn btn-success" onClick={Reset}>Reset</button>
 
             {gameState?.matrix.map((row, index) => {
                 return <Rows
+                    userSymbol={userSymbol}
+                    cpuSymbol={cpuSymbol}
                     score={score}
                     setScore={setScore}
                     gameState={gameState}

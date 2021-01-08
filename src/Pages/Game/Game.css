@@ -2,3 +2,8 @@
     margin-top: 10%;
     height: 600px;
 }
+
+.winner__holder {
+    height: 40px;
+    margin-top: -40px;
+}

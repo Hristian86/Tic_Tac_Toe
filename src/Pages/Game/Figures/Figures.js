@@ -5,20 +5,26 @@ import FirstLoop from './FirstLoop';
 import './Figures.css';
 import CheckForEquals from './CheckForEquals';
 
-const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score }) => {
+const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol }) => {
+
     const [color, setColor] = useState("matrix__col text-dark");
     const [steps, setSteps] = useState(0);
 
     const CPUTurn = () => {
+
+        const isSymbolAdded = [false];
         let CPU = gameState.matrix;
-        let resultStr = FirstLoop(CPU);
+        let resultStr = FirstLoop(CPU, cpuSymbol, userSymbol, isSymbolAdded);
+        if (CheckForEquals(CPU)) {
+            return "Equals"
+        }
+
         if (resultStr == "END") {
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
-        } else if (CheckForEquals(CPU)) {
-            return "Equals"
         }
+        
 
 
         let couner = 0;
@@ -30,49 +36,48 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
             const row1 = (cpuChoiseRow % 2).toFixed(0);
             const col1 = (cpuChoiseCol % 2).toFixed(0);
 
-            if (CPU[row1][col1] != "X" && CPU[row1][col1] != "Y") {
-                CPU[row1][col1] = "Y";
+            if (CPU[row1][col1] != userSymbol && CPU[row1][col1] != cpuSymbol) {
+                CPU[row1][col1] = cpuSymbol;
                 setGameState({
                     matrix: CPU,
+                    winner: gameState.winner,
                 });
                 break;
             }
         }
 
         resultStr = FirstLoop(CPU);
+        if (CheckForEquals(CPU)) {
+            return "Equals"
+        }
+
         if (resultStr == "END") {
             return "END";
         } else if (resultStr == "CPU WIN") {
             return "CPU WIN";
-        } else if (resultStr != "Continue") {
-            return "Equals"
-        } else if (CheckForEquals(CPU)) {
-            return "Equals"
         }
-
-        //if (couner == 30) {
-        //    return "CPU WIN"
-        //}
 
         return "Continue"
     }
 
     const positionOnPush = () => {
-        console.log(index + " " + innerIndex);
+        //console.log(index + " " + innerIndex);
 
         let matr = gameState.matrix;
-        if (matr[index][innerIndex] == "Y" || matr[index][innerIndex] == "X") {
+        if (matr[index][innerIndex] == cpuSymbol || matr[index][innerIndex] == userSymbol || gameState?.winner[0]?.length > 0) {
 
         } else {
-            matr[index][innerIndex] = "X";
+            matr[index][innerIndex] = userSymbol;
             setColor("matrix__col text-primary");
 
             setGameState({
                 matrix: matr,
+                winner: gameState.winner,
             })
 
             setTimeout(() => {
                 const res = CPUTurn();
+                const currMatrix = gameState.matrix;
                 // Put in state for winner.
                 if (res == "END") {
 
@@ -85,8 +90,10 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
                     });
 
                     setGameState({
-                        matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+                        matrix: currMatrix,
+                        winner: ["User wins."],
                     });
+
                 } else if (res == "CPU WIN") {
 
                     let scr = score.user;
@@ -98,16 +105,19 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
                     });
 
                     setGameState({
-                        matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+                        matrix: currMatrix,
+                        winner: ["CPU wins."],
                     });
                 } else if (res == "Equals") {
 
                     setGameState({
-                        matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+                        matrix: currMatrix,
+                        winner: ["Equlas."],
                     });
                 }
+
                 console.log(res);
-            }, 100)
+            }, 300)
         }
     }
 

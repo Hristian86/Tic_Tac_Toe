@@ -1,4 +1,4 @@
-const Diagonals = (CPU) => {
+const Diagonals = (CPU, cpuSymbol, userSymbol, isSymbolAdded) => {
     let index = 0;
     let reverseIndex = CPU.length - 1;
 
@@ -8,19 +8,20 @@ const Diagonals = (CPU) => {
     let isReverseDiagonalCPU = 0;
 
     while (index < CPU.length) {
-        if (CPU[index][index] == "X") {
+
+        if (CPU[index][index] == userSymbol) {
             isDiagonalUser += 1;
         }
 
-        if (CPU[index][index] == "Y") {
+        if (CPU[index][index] == cpuSymbol) {
             isDiagonalCPU += 1;
         }
 
-        if (CPU[reverseIndex][index] == "X") {
+        if (CPU[reverseIndex][index] == userSymbol) {
             isReverseDiagonalUser += 1;
         }
 
-        if (CPU[reverseIndex][index] == "Y") {
+        if (CPU[reverseIndex][index] == cpuSymbol) {
             isReverseDiagonalCPU += 1;
         }
 

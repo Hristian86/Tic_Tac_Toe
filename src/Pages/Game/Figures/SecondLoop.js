@@ -2,7 +2,7 @@ const IsOutOfBounds = (row, col, matrix) => {
     return row < 0 || row >= matrix.length || col < 0 || col >= matrix.legth;
 }
 
-export const SecondLoop = (i, matrix) => {
+export const SecondLoop = (i, matrix, cpuSymbol, userSymbol) => {
     let counterRow = 0;
     let counterCol = 0;
     let cpuCounterRow = 0;
@@ -10,28 +10,34 @@ export const SecondLoop = (i, matrix) => {
 
     for (var j = 0; j < matrix.length; j++) {
 
-        if (matrix[i][j] == "X") {
+        if (matrix[i][j] != cpuSymbol && matrix[i][j] != userSymbol && counterCol == 2) {
+            console.log("hre");
+            console.log(counterRow);
+            
+        }
+
+        if (matrix[i][j] == userSymbol) {
             counterCol += 1;
         }
 
-        if (matrix[j][i] == "X") {
+        if (matrix[j][i] == userSymbol) {
             counterRow += 1;
         }
 
-        if (matrix[i][j] == "Y") {
+        if (matrix[i][j] == cpuSymbol) {
             cpuCounterCol += 1;
         }
 
-        if (matrix[j][i] == "Y") {
+        if (matrix[j][i] == cpuSymbol) {
             cpuCounterRow += 1;
         }
     }
 
-    if (counterCol == 3 || counterRow == 3) {
+    if (counterCol == matrix.length || counterRow == matrix.length) {
         return "END";
     }
 
-    if (cpuCounterCol == 3 || cpuCounterRow == 3) {
+    if (cpuCounterCol == matrix.length || cpuCounterRow == matrix.length) {
         return "CPU WIN";
     }
 }

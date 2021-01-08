@@ -1,9 +1,9 @@
 import SecondLoop from "./SecondLoop";
 import Diagonals from "./Diagonals";
 
-const FirstLoop = (CPU) => {
+const FirstLoop = (CPU, cpuSymbol, userSymbol, isSymbolAdded) => {
 
-    const resu = Diagonals(CPU);
+    const resu = Diagonals(CPU, cpuSymbol, userSymbol, isSymbolAdded);
     if (resu == "END") {
         return "END"
     } else if (resu == "CPU WIN") {
@@ -12,7 +12,7 @@ const FirstLoop = (CPU) => {
     
     for (var i = 0; i < CPU.length; i++) {
 
-        let result = SecondLoop(i, CPU);
+        let result = SecondLoop(i, CPU, cpuSymbol, userSymbol, isSymbolAdded);
         if (result == "END") {
             return "END";
         } else if (result == "CPU WIN") {
