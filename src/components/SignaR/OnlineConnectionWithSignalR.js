@@ -7,6 +7,7 @@ import Game from '../../Pages/Game/Game';
 import FirstLoop from '../../Pages/Game/Figures/FirstLoop';
 import CheckForEquals from '../../Pages/Game/Figures/CheckForEquals';
 import ResetMatrix from '../../Pages/Game/ResetMatrix/ResetMatrix';
+import GameMode from './GameMode';
 
 const isSymbolAdded = null;
 const cpuSymbol = "Y";
@@ -30,6 +31,11 @@ export default class OnlineConnectionWithSignalR extends Component {
             opponentWin: false,
             playAgain: "no",
             resetMultyplayerGame: false,
+            forceReset: false,
+            gameResult: "",
+            userTurn: "",
+            userTurnCount: 0,
+            gameModeChoise: false,
         }
 
 
@@ -41,6 +47,27 @@ export default class OnlineConnectionWithSignalR extends Component {
         this.setState({
             currentUser: user,
         })
+
+        if (user == this.state.userTurn) {
+            this.setState({
+                gameEnd: false,
+            })
+        } else {
+            if (this.state.userTurnCount > 0) {
+                let count = 1 + this.state.userTurnCount;
+                this.setState({
+                    gameEnd: true,
+                    userTurnCount: count,
+                })
+            } else {
+
+                let count = 1 + this.state.userTurnCount;
+                this.setState({
+                    userTurnCount: count,
+                })
+            }
+        }
+
         let hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(url("message"))
             .build();
@@ -62,8 +89,29 @@ export default class OnlineConnectionWithSignalR extends Component {
 
             });
 
+            this.state.hubConnection.on("turn", (turn) => {
+
+            });
+
             this.state.hubConnection.on("play", (name, oppnentName, userTurn, cordinates, endGameWinner, playAgain) => {
                 console.log(playAgain);
+
+                console.log("User turn => " + userTurn);
+                if (user == userTurn) {
+                    this.setState({
+                        gameEnd: false,
+                    })
+                } else {
+                    this.setState({
+                        gameEnd: true,
+                    })
+                }
+
+                this.setState({
+                    userTurn: userTurn,
+                })
+
+                console.log("User turn is " + userTurn);
                 // Here is play again.
                 if (playAgain === "yes") {
                     console.log("hereeeeeeeeeee");
@@ -76,6 +124,8 @@ export default class OnlineConnectionWithSignalR extends Component {
                         playAgain: "no",
                         gameEnd: false,
                         resetMultyplayerGame: true,
+                        opponentWin: false,
+                        gameResult: "",
                     })
                 }
 
@@ -108,18 +158,21 @@ export default class OnlineConnectionWithSignalR extends Component {
                     console.log("Play again " + playAgain);
                 }
 
-                let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
 
+                let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
+                console.log("Result from mulyuplayer " + resultStr);
 
                 if (resultStr == "END") {
                     this.setState({
                         gameEnd: true,
+                        gameResult: "Winner is " + user,
                     })
                     //return "END";
                 } else if (resultStr == "CPU WIN") {
                     this.setState({
                         gameEnd: true,
                         opponentWin: true,
+                        gameResult: "Winner is " + this.state.opponent,
                     })
                     //return "CPU WIN";
                 }
@@ -127,6 +180,7 @@ export default class OnlineConnectionWithSignalR extends Component {
                 if (CheckForEquals(this.state.matrix)) {
                     this.setState({
                         gameEnd: true,
+                        gameResult: resultStr,
                     })
                     //return "Equals"
                 }
@@ -146,19 +200,60 @@ export default class OnlineConnectionWithSignalR extends Component {
             playAgain: "yes",
             gameEnd: false,
             resetMultyplayerGame: true,
+            forceReset: true,
         })
 
         setTimeout(() => {
             this.Play("");
-        }, 100)
+            this.setState({
+                playAgain: "no",
+                opponentWin: false,
+                forceReset: false,
+                gameResult: ""
+            })
+        }, 200)
     }
 
     Play = (position) => {
-
         const user = getCookie("user");
-        const opponent = "Admin1";
+        console.log("User turn => " + this.state.userTurn);
+        if (user == this.state.userTurn) {
+            this.setState({
+                gameEnd: false,
+            })
+        } else {
+            this.setState({
+                gameEnd: true,
+            })
+        }
 
-        const names = ["Admin1", "Admin"];
+        let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
+        console.log("Result from mulyuplayer " + resultStr);
+
+        if (resultStr == "END") {
+            this.setState({
+                gameEnd: true,
+                gameResult: "Winner is " + user,
+            })
+            //return "END";
+        } else if (resultStr == "CPU WIN") {
+            this.setState({
+                gameEnd: true,
+                opponentWin: true,
+                gameResult: "Winner is " + this.state.opponent,
+            })
+            //return "CPU WIN";
+        }
+
+        if (CheckForEquals(this.state.matrix)) {
+            this.setState({
+                gameEnd: true,
+                gameResult: resultStr,
+            })
+            //return "Equals"
+        }
+
+        const names = [user, this.state.opponent];
         console.log(this.state.playAgain);
 
         let endGameWinner = "";
@@ -166,7 +261,7 @@ export default class OnlineConnectionWithSignalR extends Component {
             endGameWinner = user;
         }
 
-        this.state.hubConnection.invoke("play", user, this.state.opponent, names[this.state.turn], position, endGameWinner, this.state.playAgain)
+        this.state.hubConnection.invoke("play", user, this.state.opponent, this.state.opponent, position, endGameWinner, this.state.playAgain)
             .catch(err => console.error(err));
 
         if (this.state.turn == 0) {
@@ -205,12 +300,28 @@ export default class OnlineConnectionWithSignalR extends Component {
         })
     }
 
+    gameModeHandler = (option, selectedUser) => {
+        console.log(selectedUser);
+        if (option == true) {
+            this.setState({
+                multyplayer: true,
+                gameModeChoise: true,
+                opponent: selectedUser,
+            })
+        } else {
+            this.setState({
+                multyplayer: false,
+                gameModeChoise: true,
+            })
+        }
+    }
+
     render() {
 
         return (
             <div className="container-fluid">
 
-                <form>
+                {/*<form>
                     <input
                         value={this.state.opponent} onChange={this.opponentHandler} />
 
@@ -218,7 +329,7 @@ export default class OnlineConnectionWithSignalR extends Component {
 
                 </form>
 
-                <button onClick={() => this.Play("asd")}>Play</button>
+                <button onClick={() => this.Play("asd")}>Play</button>*/}
 
                 <form
                     className="col-sm-2 chat__home"
@@ -240,12 +351,18 @@ export default class OnlineConnectionWithSignalR extends Component {
                     </div>)}
                 </form>
 
-                {this.state.gameEnd ? "End" : null}
+                {/*{this.state.gameEnd ? "End" : null}
                 <button className="btn btn-warning ml-sm-5" onClick={this.playMoreGames}>Play again</button>
 
-                <button className="btn btn-primary ml-sm-5" onClick={this.setGameMode}>Change game mode</button>
+                <button className="btn btn-primary ml-sm-5" onClick={this.setGameMode}>Change game mode</button>*/}
 
-                <Game
+                {this.state?.gameModeChoise ? <Game
+                    setGameMode={this.setGameMode}
+                    playMoreGames={this.playMoreGames}
+                    userTurn={this.state.userTurn}
+                    gameResult={this.state.gameResult}
+                    forceReset={this.state.forceReset}
+                    gameEnd={this.state.gameEnd}
                     resetMultyplayerGame={this.state.resetMultyplayerGame}
                     opponentWin={this.state.opponentWin}
                     opponent={this.state.opponent}
@@ -254,6 +371,9 @@ export default class OnlineConnectionWithSignalR extends Component {
                     positionParametars={this.state.positionParametars}
                     Play={this.Play}
                 />
+                    : <GameMode
+                        gameModeHandler={this.gameModeHandler}
+                    />}
 
                 {this.props.children}
                 <div></div>

@@ -10,7 +10,7 @@ const userSymbol = "X";
 const cpuSymbol = "Y";
 const winner = [];
 
-const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame }) => {
+const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame, forceReset, gameResult, gameEnd, userTurn, playMoreGames, setGameMode }) => {
     const [{ fetchData }, dispatch] = useStateValue();
     const [gameState, setGameState] = useState({
         matrix: matrix,
@@ -23,6 +23,13 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
     });
 
     useEffect(() => {
+        if (multyplayer) {
+            setGameState({
+                matrix: matrix,
+                winner: [gameResult],
+            })
+        }
+
         if (opponentWin) {
 
             setGameState({
@@ -37,7 +44,17 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
                 winner: [""],
             })
         }
-    }, [opponentWin, resetMultyplayerGame])
+
+        if (forceReset) {
+            setGameState({
+                matrix: matrix,
+                winner: [""],
+            })
+        }
+
+
+
+    }, [opponentWin, resetMultyplayerGame, forceReset, multyplayer])
 
     const Reset = () => {
         ResetMatrix(matrix, startField);
@@ -52,23 +69,46 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
 
 
 
-        <div className="game__options">
+        <div className="game__options text-center">
 
-            <h2 className="winner__holder">{gameState?.winner[0]}</h2>
+            <div className="pb-5">
 
-            <div>
-                user score: {score?.user}
-                <br />
-                cpu score: {score?.cpu}
+                <div className="">
+                    
+                    <div className="btn btn-success" onClick={playMoreGames}>Play again</div>
+                </div>
+
+                {/*<div className="">
+                    <div className="btn btn-primary ml-5" onClick={setGameMode}>Change game mode</div>
+                </div>*/}
+
+                {multyplayer ? <div className="opponet__perant">Opponent {opponent}</div> : null}
+
             </div>
 
-            {multyplayer ? null : <div>
-                <button className="btn btn-success" onClick={Reset}>Reset</button>
+            <div className="game__perant">
+                {multyplayer && userTurn?.length > 0 && gameResult?.length == 0 ? <h2 className="winner__holder">{userTurn} Turn</h2> : null}
 
-            </div>}
+                {multyplayer
+                    ? <h2 className="winner__holder">{gameResult}</h2>
+                    : <h2 className="winner__holder">{gameState?.winner[0]}</h2>}
+
+                <div>
+                    user score: {score?.user}
+                    <br />
+                    cpu score: {score?.cpu}
+                </div>
+
+                {multyplayer ? null : <div>
+                    <button className="btn btn-success" onClick={Reset}>Reset</button>
+
+                </div>}
+
+            </div>
 
             {gameState?.matrix.map((row, index) => {
                 return <Rows
+                    gameEnd={gameEnd}
                     multyplayer={multyplayer}
                     positionParametars={positionParametars}
                     Play={Play}

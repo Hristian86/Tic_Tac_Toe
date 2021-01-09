@@ -5,7 +5,7 @@ import FirstLoop from './FirstLoop';
 import './Figures.css';
 import CheckForEquals from './CheckForEquals';
 
-const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars, multyplayer }) => {
+const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars, multyplayer, gameEnd }) => {
 
 
     const [color, setColor] = useState("matrix__col text-dark");
@@ -36,7 +36,7 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         } else {
 
             let couner = 0;
-            while (couner < 30) {
+            while (couner < 60) {
                 couner += 1;
                 const cpuChoiseRow = Math.random() * 10;
                 const cpuChoiseCol = Math.random() * 10;
@@ -76,7 +76,7 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         
 
         let matr = gameState.matrix;
-        if (matr[index][innerIndex] == cpuSymbol || matr[index][innerIndex] == userSymbol || gameState?.winner[0]?.length > 0) {
+        if (matr[index][innerIndex] == cpuSymbol || matr[index][innerIndex] == userSymbol || gameEnd || (gameState.winner[0]?.length > 0 && !multyplayer)) {
 
         } else {
             matr[index][innerIndex] = userSymbol;

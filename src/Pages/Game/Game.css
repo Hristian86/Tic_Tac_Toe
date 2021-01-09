@@ -1,9 +1,19 @@
 .game__options {
-    margin-top: 10%;
-    height: 600px;
+    /*margin-top: 0%;*/
+    height: 700px;
+    width: 500px;
 }
 
 .winner__holder {
     height: 40px;
     margin-top: -40px;
+}
+
+.game__perant {
+    height: 130px;
+}
+
+.opponet__perant {
+    max-width: 160px;
+    max-height: 20px;
 }
