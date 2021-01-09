@@ -5,12 +5,8 @@ import FirstLoop from './FirstLoop';
 import './Figures.css';
 import CheckForEquals from './CheckForEquals';
 
-const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars }) => {
+const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars, multyplayer }) => {
 
-    let multyplayer = true;
-    if (positionParametars == null) {
-        multyplayer = false;
-    }
 
     const [color, setColor] = useState("matrix__col text-dark");
     const [steps, setSteps] = useState(0);
@@ -33,11 +29,10 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         }
 
         if (multyplayer) {
-            if (positionParametars != undefined && positionParametars != null) {
 
-                var position = positionParametars.split(", ");
-                CPU[position[0]][position[1]] = cpuSymbol;
-            }
+            //var position = positionParametars.split(", ");
+            //CPU[position[0]][position[1]] = cpuSymbol;
+
         } else {
 
             let couner = 0;
@@ -78,7 +73,7 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
     const positionOnPush = () => {
         //console.log(index + " " + innerIndex);
 
-        Play(`${index}, ${innerIndex}`);
+        
 
         let matr = gameState.matrix;
         if (matr[index][innerIndex] == cpuSymbol || matr[index][innerIndex] == userSymbol || gameState?.winner[0]?.length > 0) {
@@ -86,6 +81,12 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         } else {
             matr[index][innerIndex] = userSymbol;
             setColor("matrix__col text-primary");
+
+
+
+            if (multyplayer) {
+                Play(`${index}, ${innerIndex}`);
+            }
 
             setGameState({
                 matrix: matr,

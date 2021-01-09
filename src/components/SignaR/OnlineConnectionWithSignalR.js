@@ -4,6 +4,13 @@ import url from '../BaseUrl/BaseUrl';
 import getCookie from '../Cookies/GetCookie';
 import StateStore from './StateStore';
 import Game from '../../Pages/Game/Game';
+import FirstLoop from '../../Pages/Game/Figures/FirstLoop';
+import CheckForEquals from '../../Pages/Game/Figures/CheckForEquals';
+import ResetMatrix from '../../Pages/Game/ResetMatrix/ResetMatrix';
+
+const isSymbolAdded = null;
+const cpuSymbol = "Y";
+const userSymbol = "X";
 
 export default class OnlineConnectionWithSignalR extends Component {
     constructor(props) {
@@ -18,7 +25,15 @@ export default class OnlineConnectionWithSignalR extends Component {
             turn: 0,
             positionParametars: null,
             matrix: [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]],
+            multyplayer: false,
+            gameEnd: false,
+            opponentWin: false,
+            playAgain: "no",
+            resetMultyplayerGame: false,
         }
+
+
+
     }
 
     componentDidMount = () => {
@@ -47,16 +62,33 @@ export default class OnlineConnectionWithSignalR extends Component {
 
             });
 
-            this.state.hubConnection.on("play", (name, oppnentName, userTurn, cordinates) => {
+            this.state.hubConnection.on("play", (name, oppnentName, userTurn, cordinates, endGameWinner, playAgain) => {
+                console.log(playAgain);
+                // Here is play again.
+                if (playAgain === "yes") {
+                    console.log("hereeeeeeeeeee");
+                    let matrix = this.state.matrix;
 
-                if (oppnentName == this.state.currentUser) {
+                    matrix = ResetMatrix(matrix, "0");
+
+                    this.setState({
+                        matrix: matrix,
+                        playAgain: "no",
+                        gameEnd: false,
+                        resetMultyplayerGame: true,
+                    })
+                }
+
+                // if opponent name equal current name.
+                if (oppnentName == this.state.currentUser && !this.state.gameEnd) {
                     console.log("Here");
                     this.setState({
                         positionParametars: cordinates,
                     })
 
+
                     // Fixing this thing for impruvments.
-                    if (cordinates.length > 1) {
+                    if (name.length > 1 && cordinates.length > 2) {
                         const position = cordinates.split(", ");
                         const matrix = this.state.matrix;
                         matrix[position[0]][position[1]] = "Y";
@@ -71,11 +103,54 @@ export default class OnlineConnectionWithSignalR extends Component {
                     console.log(oppnentName);
                     console.log(userTurn);
                     console.log(cordinates);
+                    console.log("Opponent winner" + endGameWinner);
+
+                    console.log("Play again " + playAgain);
+                }
+
+                let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
+
+
+                if (resultStr == "END") {
+                    this.setState({
+                        gameEnd: true,
+                    })
+                    //return "END";
+                } else if (resultStr == "CPU WIN") {
+                    this.setState({
+                        gameEnd: true,
+                        opponentWin: true,
+                    })
+                    //return "CPU WIN";
+                }
+
+                if (CheckForEquals(this.state.matrix)) {
+                    this.setState({
+                        gameEnd: true,
+                    })
+                    //return "Equals"
                 }
 
             });
 
         });
+    }
+
+    playMoreGames = () => {
+        let matrix = this.state.matrix;
+
+        matrix = ResetMatrix(matrix, "0");
+
+        this.setState({
+            matrix: matrix,
+            playAgain: "yes",
+            gameEnd: false,
+            resetMultyplayerGame: true,
+        })
+
+        setTimeout(() => {
+            this.Play("");
+        }, 100)
     }
 
     Play = (position) => {
@@ -84,8 +159,14 @@ export default class OnlineConnectionWithSignalR extends Component {
         const opponent = "Admin1";
 
         const names = ["Admin1", "Admin"];
-        console.log(this.state);
-        this.state.hubConnection.invoke("play", user, this.state.opponent, names[this.state.turn], position)
+        console.log(this.state.playAgain);
+
+        let endGameWinner = "";
+        if (this.state.gameEnd) {
+            endGameWinner = user;
+        }
+
+        this.state.hubConnection.invoke("play", user, this.state.opponent, names[this.state.turn], position, endGameWinner, this.state.playAgain)
             .catch(err => console.error(err));
 
         if (this.state.turn == 0) {
@@ -116,6 +197,12 @@ export default class OnlineConnectionWithSignalR extends Component {
             opponent: e.target.value,
         })
 
+    }
+
+    setGameMode = () => {
+        this.setState({
+            multyplayer: !this.state.multyplayer
+        })
     }
 
     render() {
@@ -153,8 +240,16 @@ export default class OnlineConnectionWithSignalR extends Component {
                     </div>)}
                 </form>
 
+                {this.state.gameEnd ? "End" : null}
+                <button className="btn btn-warning ml-sm-5" onClick={this.playMoreGames}>Play again</button>
+
+                <button className="btn btn-primary ml-sm-5" onClick={this.setGameMode}>Change game mode</button>
 
                 <Game
+                    resetMultyplayerGame={this.state.resetMultyplayerGame}
+                    opponentWin={this.state.opponentWin}
+                    opponent={this.state.opponent}
+                    multyplayer={this.state.multyplayer}
                     matrix={this.state.matrix}
                     positionParametars={this.state.positionParametars}
                     Play={this.Play}

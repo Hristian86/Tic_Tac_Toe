@@ -3,14 +3,14 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\AuthO",
-    "\\src\\components\\ContextApi",
     "\\src\\components\\SignaR",
     "\\src\\Pages",
     "\\src\\Pages\\Game",
+    "\\src\\Pages\\Game\\Figures",
     "\\src\\Pages\\Game\\ResetMatrix",
+    "\\src\\Pages\\Game\\Rows",
     "\\src\\Pages\\Home"
   ],
-  "SelectedNode": "\\src\\Pages\\Game\\Figures\\Figures.js",
+  "SelectedNode": "\\src\\components\\SignaR\\OnlineConnectionWithSignalR.js",
   "PreviewInSolutionExplorer": false
 }

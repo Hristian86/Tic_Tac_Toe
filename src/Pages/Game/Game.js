@@ -3,13 +3,14 @@ import Rows from './Rows/Rows';
 import './Game.css';
 import ResetMatrix from './ResetMatrix/ResetMatrix';
 import { useStateValue } from '../../components/ContextApi/StateProvider';
+import { useEffect } from 'react';
 
 const startField = "0";
 const userSymbol = "X";
 const cpuSymbol = "Y";
 const winner = [];
 
-const Game = ({ Play, positionParametars, matrix }) => {
+const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame }) => {
     const [{ fetchData }, dispatch] = useStateValue();
     const [gameState, setGameState] = useState({
         matrix: matrix,
@@ -20,6 +21,23 @@ const Game = ({ Play, positionParametars, matrix }) => {
         user: 0,
         cpu: 0,
     });
+
+    useEffect(() => {
+        if (opponentWin) {
+
+            setGameState({
+                matrix: matrix,
+                winner: ["Winner is " + opponent],
+            })
+        }
+
+        if (resetMultyplayerGame) {
+            setGameState({
+                matrix: matrix,
+                winner: [""],
+            })
+        }
+    }, [opponentWin, resetMultyplayerGame])
 
     const Reset = () => {
         ResetMatrix(matrix, startField);
@@ -32,7 +50,7 @@ const Game = ({ Play, positionParametars, matrix }) => {
 
     return <div className="container d-flex justify-content-center bg-light game__container">
 
-        
+
 
         <div className="game__options">
 
@@ -44,11 +62,14 @@ const Game = ({ Play, positionParametars, matrix }) => {
                 cpu score: {score?.cpu}
             </div>
 
+            {multyplayer ? null : <div>
+                <button className="btn btn-success" onClick={Reset}>Reset</button>
 
-            <button className="btn btn-success" onClick={Reset}>Reset</button>
+            </div>}
 
             {gameState?.matrix.map((row, index) => {
                 return <Rows
+                    multyplayer={multyplayer}
                     positionParametars={positionParametars}
                     Play={Play}
                     userSymbol={userSymbol}
