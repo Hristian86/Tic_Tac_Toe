@@ -4,13 +4,15 @@ import './Game.css';
 import ResetMatrix from './ResetMatrix/ResetMatrix';
 import { useStateValue } from '../../components/ContextApi/StateProvider';
 import { useEffect } from 'react';
+import getCookie from '../../components/Cookies/GetCookie';
 
 const startField = "0";
 const userSymbol = "X";
 const cpuSymbol = "Y";
 const winner = [];
 
-const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame, forceReset, gameResult, gameEnd, userTurn, playMoreGames, setGameMode }) => {
+const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame, forceReset, gameResult, gameEnd, userTurn, playMoreGames, setGameMode, playAgainHub }) => {
+    const user = getCookie('user');
     const [{ fetchData }, dispatch] = useStateValue();
     const [gameState, setGameState] = useState({
         matrix: matrix,
@@ -23,27 +25,47 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
     });
 
     useEffect(() => {
-        if (multyplayer) {
-            setGameState({
-                matrix: matrix,
-                winner: [gameResult],
-            })
-        }
+        //if (multyplayer) {
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: [gameResult],
+        //    })
+        //}
 
-        if (opponentWin) {
+        //if (opponentWin) {
 
-            setGameState({
-                matrix: matrix,
-                winner: ["Winner is " + opponent],
-            })
-        }
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: ["Winner is " + opponent],
+        //    })
+        //}
 
-        if (resetMultyplayerGame) {
-            setGameState({
-                matrix: matrix,
-                winner: [""],
-            })
-        }
+        //if (resetMultyplayerGame) {
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: [""],
+        //    })
+        //}        //if (multyplayer) {
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: [gameResult],
+        //    })
+        //}
+
+        //if (opponentWin) {
+
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: ["Winner is " + opponent],
+        //    })
+        //}
+
+        //if (resetMultyplayerGame) {
+        //    setGameState({
+        //        matrix: matrix,
+        //        winner: [""],
+        //    })
+        //}
 
         if (forceReset) {
             setGameState({
@@ -52,10 +74,9 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
             })
         }
 
+    }, [forceReset])
 
-
-    }, [opponentWin, resetMultyplayerGame, forceReset, multyplayer])
-
+    // Reset single player game.
     const Reset = () => {
         ResetMatrix(matrix, startField);
         console.log(fetchData);
@@ -74,8 +95,12 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
             <div className="pb-5">
 
                 <div className="">
-                    
-                    <div className="btn btn-success" onClick={playMoreGames}>Play again</div>
+
+                    <div id="waiting"></div>
+
+                    {multyplayer ? 
+                        <div id="playAgain" className="btn btn-success" onClick={playAgainHub}>Play again</div>
+                        : null}
                 </div>
 
                 {/*<div className="">
@@ -87,7 +112,10 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
             </div>
 
             <div className="game__perant">
-                {multyplayer && userTurn?.length > 0 && gameResult?.length == 0 ? <h2 className="winner__holder">{userTurn} Turn</h2> : null}
+                {multyplayer && userTurn?.length > 0 && gameResult?.length == 0 ? userTurn === user
+                    ? <h2 className="winner__holder">Your turn</h2>
+                    : <h2 className="winner__holder">Opponent turn</h2>
+                    : null}
 
                 {multyplayer
                     ? <h2 className="winner__holder">{gameResult}</h2>

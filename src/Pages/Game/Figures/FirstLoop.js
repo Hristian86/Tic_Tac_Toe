@@ -1,21 +1,21 @@
 import SecondLoop from "./SecondLoop";
 import Diagonals from "./Diagonals";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 const FirstLoop = (CPU, cpuSymbol, userSymbol, isSymbolAdded) => {
-
+    // Check diagonals for win.
     const resu = Diagonals(CPU, cpuSymbol, userSymbol, isSymbolAdded);
-    if (resu == "END") {
-        return "END"
-    } else if (resu == "CPU WIN") {
-        return "CPU WIN"
+
+    if (resu !== undefined) {
+        return resu;
     }
-    
+
     for (var i = 0; i < CPU.length; i++) {
 
         let result = SecondLoop(i, CPU, cpuSymbol, userSymbol, isSymbolAdded);
-        if (result == "END") {
+        if (result === "END") {
             return "END";
-        } else if (result == "CPU WIN") {
+        } else if (result === "CPU WIN") {
             return "CPU WIN";
         }
     }

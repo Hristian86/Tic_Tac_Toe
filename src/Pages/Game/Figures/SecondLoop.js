@@ -10,11 +10,12 @@ export const SecondLoop = (i, matrix, cpuSymbol, userSymbol) => {
 
     for (var j = 0; j < matrix.length; j++) {
 
-        if (matrix[i][j] != cpuSymbol && matrix[i][j] != userSymbol && counterCol == 2) {
-            console.log("hre");
-            console.log(counterRow);
+        // To Do logic for cpu not only to put random.
+        //if (matrix[i][j] != cpuSymbol && matrix[i][j] != userSymbol && counterCol == 2) {
+        //    console.log("hre");
+        //    console.log(counterRow);
             
-        }
+        //}
 
         if (matrix[i][j] == userSymbol) {
             counterCol += 1;
