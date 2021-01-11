@@ -219,7 +219,7 @@ const Login = (props) => {
                         className="mr-3 text-infos">
                         <div className="">
                             <span className="header__optionsLineOne">Dont have account </span>< br />
-                            <span className="register__link text-white shadow-box">Create new account</span>
+                            <h5 className="register__link text-info shadow-box">Create new account</h5>
                         </div>
                     </Link>
 
@@ -228,7 +228,7 @@ const Login = (props) => {
                         href={url("Identity/Account/ForgotPassword")}
                         className="mr-3 text-infos">
                         <div className="">
-                            <span className="register__link text-white shadow-box">Forgot your password?</span>
+                            <h5 className="register__link text-info shadow-box">Forgot your password?</h5>
                         </div>
                     </a>
 

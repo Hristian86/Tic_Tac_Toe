@@ -139,12 +139,6 @@ const Navbars = () => {
                 {state.user ? "Log out" : "LogIn"}
             </Link>
 
-            <Link to="/" className="mr-3 text-info" onClick={prevDef}>{store?.basket?.length}</Link>
-
-            <button onClick={removefromBasket}>removefromBasket</button>
-
-            <div className="mr-3 text-info" onClick={prevDef}>{user?.length}</div>
-
         </Navbar.Collapse>
     </Navbar>
 

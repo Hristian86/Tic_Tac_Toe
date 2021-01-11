@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import FetchData from '../AuthListener/FetchData';
 import SelectedUser from './SelectedUser';
+import getCookie from '../Cookies/GetCookie';
+import { Link } from 'react-router-dom';
 
 const GameMode = ({ gameModeHandler }) => {
+    const user = getCookie('user');
 
     const [onlineUserList, setOnlineUserList] = useState({
         users: [],
@@ -32,7 +35,7 @@ const GameMode = ({ gameModeHandler }) => {
         gameModeHandler(false, null);
     }
 
-    return <div className="">
+    return <div className="options__intro">
 
         <div className="text-center">
             <button
@@ -42,10 +45,13 @@ const GameMode = ({ gameModeHandler }) => {
 
 
 
-            <button
+            {user.length > 0 ? <button
                 className="btn btn-danger ml-2"
                 onClick={() => setMultiOption(!multiOption)}
             >MultiPlayer</button>
+                : <Link
+                    to="/AuthO/LogIn"
+                ><em className="btn btn-warning ml-2">Please lof in to have online experience</em></Link>}
 
         </div>
 
