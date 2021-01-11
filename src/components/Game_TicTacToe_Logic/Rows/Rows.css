@@ -1,0 +1,21 @@
+.matrix__row {
+    font-size: 85px;
+    cursor: pointer;
+    width: 700px;
+    height: 210px;
+    margin-bottom: 10px;
+}
+
+.row__win{
+    display: none;
+}
+
+@media only screen and (max-width: 900px) {
+    .matrix__row {
+        font-size: 85px;
+        cursor: pointer;
+        width: 380px;
+        height: 110px;
+        margin-bottom: 10px;
+    }
+}

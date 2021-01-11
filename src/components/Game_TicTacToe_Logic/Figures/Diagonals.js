@@ -1,3 +1,5 @@
+import { left_diagonal_line, right_diagonal_line } from "../../WinDrawLines/Win_draw_line";
+
 const Diagonals = (CPU, cpuSymbol, userSymbol, isSymbolAdded) => {
     let index = 0;
     let reverseIndex = CPU.length - 1;
@@ -33,10 +35,22 @@ const Diagonals = (CPU, cpuSymbol, userSymbol, isSymbolAdded) => {
     }
 
     if (isDiagonalUser == CPU.length || isReverseDiagonalUser == CPU.length) {
-
         // To Do drow left to right line.
+
+        if (isDiagonalUser === CPU.length) {
+            left_diagonal_line();
+        } else {
+            right_diagonal_line();
+        }
+
         return "END";
     } else if (isDiagonalCPU == CPU.length || isReverseDiagonalCPU == CPU.length) {
+
+        if (isDiagonalCPU === CPU.length) {
+            left_diagonal_line();
+        } else {
+            right_diagonal_line();
+        }
 
         // To Do drow right to left line.
         return "CPU WIN";

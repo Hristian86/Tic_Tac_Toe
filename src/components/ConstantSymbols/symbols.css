@@ -1,0 +1,14 @@
+.x__symbol_style {
+    width: 160px;
+    padding-top: 30px;
+}
+
+@media only screen and (max-width: 900px) {
+    .x__symbol_style {
+        width: 80px;
+        align-items: center;
+        margin-left: 10%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+}

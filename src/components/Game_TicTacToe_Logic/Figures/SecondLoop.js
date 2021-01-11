@@ -1,3 +1,5 @@
+import { horisontal_line, vertical_line } from "../../WinDrawLines/Win_draw_line";
+
 const IsOutOfBounds = (row, col, matrix) => {
     return row < 0 || row >= matrix.length || col < 0 || col >= matrix.legth;
 }
@@ -14,7 +16,7 @@ export const SecondLoop = (i, matrix, cpuSymbol, userSymbol) => {
         //if (matrix[i][j] != cpuSymbol && matrix[i][j] != userSymbol && counterCol == 2) {
         //    console.log("hre");
         //    console.log(counterRow);
-            
+
         //}
 
         if (matrix[i][j] == userSymbol) {
@@ -35,10 +37,28 @@ export const SecondLoop = (i, matrix, cpuSymbol, userSymbol) => {
     }
 
     if (counterCol == matrix.length || counterRow == matrix.length) {
+
+        if (counterCol === matrix.length) {
+            horisontal_line(i);
+        }
+
+        if (counterRow === matrix.length) {
+            vertical_line(i);
+        }
+
         return "END";
     }
 
     if (cpuCounterCol == matrix.length || cpuCounterRow == matrix.length) {
+        if (cpuCounterCol === matrix.length) {
+            horisontal_line(i);
+        }
+
+        if (cpuCounterRow === matrix.length) {
+            vertical_line(i);
+        }
+
+
         return "CPU WIN";
     }
 }

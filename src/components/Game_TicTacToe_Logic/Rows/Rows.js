@@ -4,8 +4,9 @@ import './Rows.css';
 
 const Rows = ({ index, row, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars, multyplayer, gameEnd }) => {
     
-    return <p
-        className="matrix__row"
+    return <div
+        className="matrix__row row"
+        id={"row" + index}
         key={index}>
         {row.map((col, innerIndex) => {
             return <Figures
@@ -25,7 +26,7 @@ const Rows = ({ index, row, setGameState, gameState, setScore, score, userSymbol
                 innerIndex={innerIndex}
             />
         })}
-    </p>
+    </div>
 
 }
 

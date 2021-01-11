@@ -21,7 +21,7 @@ import getCookie from './components/Cookies/GetCookie';
 import setCookie from './components/Cookies/SetCookie';
 import url from './components/BaseUrl/BaseUrl';
 import NotFound from './Pages/NotFoundPage/NotFount';
-import Game from './Pages/Game/Game';
+
 //import PrivateRoute from './components/Auth/PrivateRoute';
 const App = () => {
 
@@ -91,8 +91,6 @@ const App = () => {
                         <Route exact path="/" component={Home}>
                         </Route>
 
-                        <Route exact path="/game" component={Game}>
-                        </Route>
 
                         <Route path="/AuthO/Register" component={Register}>
                         </Route>

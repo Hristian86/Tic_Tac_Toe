@@ -113,7 +113,7 @@ const Navbars = () => {
 
                 <Link
                     className="text-info ml-sm-3"
-                    to="/game"
+                    to="/"
                     onClick={() => prevDef}>
                     Game
                     </Link>

@@ -1,0 +1,17 @@
+.matrix__col:hover {
+    color: #ffd800!important;
+}
+
+.matrix__col {
+    margin-left: 20px;
+    width: 200px;
+}
+
+
+@media only screen and (max-width: 900px) {
+    .matrix__col {
+        display: flex;
+        margin-left: 20px;
+        width: 100px;
+    }
+}

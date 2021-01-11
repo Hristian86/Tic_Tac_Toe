@@ -3,12 +3,12 @@ import * as signalR from '@aspnet/signalr';
 import url from '../BaseUrl/BaseUrl';
 import getCookie from '../Cookies/GetCookie';
 import StateStore from './StateStore';
-import Game from '../../Pages/Game/Game';
-import FirstLoop from '../../Pages/Game/Figures/FirstLoop';
-import CheckForEquals from '../../Pages/Game/Figures/CheckForEquals';
-import ResetMatrix from '../../Pages/Game/ResetMatrix/ResetMatrix';
 import GameMode from './GameMode';
 import { _cpuSymbol, _userSymbol, _startSymbol, _accept, _decline } from '../ConstantSymbols/ConstantSymbols';
+import ResetMatrix from '../Game_TicTacToe_Logic/ResetMatrix/ResetMatrix';
+import CheckForEquals from '../Game_TicTacToe_Logic/Figures/CheckForEquals';
+import FirstLoop from '../Game_TicTacToe_Logic/Figures/FirstLoop';
+import Game from '../Game_TicTacToe_Logic/Game';
 
 const isSymbolAdded = null;
 const cpuSymbol = _cpuSymbol;
@@ -43,9 +43,6 @@ export default class OnlineConnectionWithSignalR extends Component {
             currentGameWinner: "",
             challangeChoise: false,
         }
-
-
-
     }
 
     componentDidMount = () => {

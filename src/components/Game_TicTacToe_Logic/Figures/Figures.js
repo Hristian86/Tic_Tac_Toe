@@ -4,6 +4,8 @@ import DFS from './DFS';
 import FirstLoop from './FirstLoop';
 import './Figures.css';
 import CheckForEquals from './CheckForEquals';
+import X_Symbol from '../../ConstantSymbols/X_Symbol';
+import O_Symbol from '../../ConstantSymbols/O_Symbol';
 
 const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, score, userSymbol, cpuSymbol, Play, positionParametars, multyplayer, gameEnd }) => {
 
@@ -140,12 +142,19 @@ const Figures = ({ col, innerIndex, index, setGameState, gameState, setScore, sc
         }
     }
 
-    return <span
+    return <div
         onClick={positionOnPush}
         className={color}
+        id={"col" + index + innerIndex}
         key={innerIndex}>
-        {col + " "}
-    </span>
+        {col == "X"
+            ? <X_Symbol />
+            : null}
+
+        {col == "Y"
+            ? <O_Symbol />
+            : null}
+    </div>
 
 }
 

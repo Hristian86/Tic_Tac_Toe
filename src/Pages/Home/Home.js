@@ -10,7 +10,6 @@ import Tests from '../../components/Tests';
 import propsy from '../../components/SendingProps';
 import login from '../../components/AuthO/LogIn';
 import getCookie from '../../components/Cookies/GetCookie';
-import Game from '../Game/Game';
 import OnlineConnectionWithSignalR from '../../components/SignaR/OnlineConnectionWithSignalR';
 import './Home.css';
 

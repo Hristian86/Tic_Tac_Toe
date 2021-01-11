@@ -98,7 +98,7 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
 
                     <div id="waiting"></div>
 
-                    {multyplayer ? 
+                    {multyplayer ?
                         <div id="playAgain" className="btn btn-success" onClick={playAgainHub}>Play again</div>
                         : null}
                 </div>
@@ -134,23 +134,29 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
 
             </div>
 
-            {gameState?.matrix.map((row, index) => {
-                return <Rows
-                    gameEnd={gameEnd}
-                    multyplayer={multyplayer}
-                    positionParametars={positionParametars}
-                    Play={Play}
-                    userSymbol={userSymbol}
-                    cpuSymbol={cpuSymbol}
-                    score={score}
-                    setScore={setScore}
-                    gameState={gameState}
-                    setGameState={setGameState}
-                    key={index}
-                    index={index}
-                    row={row}
-                />
-            })}
+            <div className="matrix__win" id="matrix__win">
+                <div className="matrix__perant">
+
+                    {gameState?.matrix.map((row, index) => {
+                        return <Rows
+                            gameEnd={gameEnd}
+                            multyplayer={multyplayer}
+                            positionParametars={positionParametars}
+                            Play={Play}
+                            userSymbol={userSymbol}
+                            cpuSymbol={cpuSymbol}
+                            score={score}
+                            setScore={setScore}
+                            gameState={gameState}
+                            setGameState={setGameState}
+                            key={index}
+                            index={index}
+                            row={row}
+                        />
+                    })}
+
+                </div>
+            </div>
 
         </div>
 
