@@ -1,16 +1,17 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
-    "\\public\\images",
     "\\src",
     "\\src\\components",
+    "\\src\\components\\AuthO",
+    "\\src\\components\\ConstantSymbols",
     "\\src\\components\\Game_TicTacToe_Logic",
-    "\\src\\components\\Game_TicTacToe_Logic\\Figures",
-    "\\src\\components\\Game_TicTacToe_Logic\\Rows",
+    "\\src\\components\\Game_TicTacToe_Logic\\ResetMatrix",
+    "\\src\\components\\SignaR",
+    "\\src\\components\\WinDrawLines",
     "\\src\\Pages",
     "\\src\\Pages\\Home"
   ],
-  "SelectedNode": "\\src\\components\\Game_TicTacToe_Logic\\Figures\\FirstLoop.js",
+  "SelectedNode": "\\src\\components\\Game_TicTacToe_Logic\\Game.js",
   "PreviewInSolutionExplorer": false
 }

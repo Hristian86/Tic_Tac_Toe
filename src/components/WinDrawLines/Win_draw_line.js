@@ -19,21 +19,21 @@ export const vertical_line = (j) => {
 export const left_diagonal_line = () => {
 
     for (var i = 0; i < 3; i++) {
+        document.getElementById("col" + i + i).style.backgroundPosition = "center"
 
         document.getElementById("col" + i + i).style.backgroundImage = "url('images/left.png')";
 
-        document.getElementById("col" + i + i).style.backgroundPosition = "center"
     }
 }
 
 export const right_diagonal_line = () => {
 
     for (var i = 0; i < 3; i++) {
+        document.getElementById("col" + i + i).style.backgroundPosition = "center"
 
         document.getElementById("col" + (3 - i - 1) + i).style.backgroundImage = "url('/images/output-onlinepngtools.png')";
 
 
-        document.getElementById("col" + i + i).style.backgroundPosition = "center"
 
         //document.getElementById("col" + i + i).style.transform = "rotate(90deg)"
     }

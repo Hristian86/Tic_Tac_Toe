@@ -4,7 +4,8 @@
 
 .matrix__col {
     margin-left: 20px;
-    width: 200px;
+    width: 150px;
+    height: 150px;
 }
 
 
@@ -13,5 +14,6 @@
         display: flex;
         margin-left: 20px;
         width: 100px;
+        height: 116px;
     }
 }

@@ -1,7 +1,7 @@
 .game__options {
     /*margin-top: 0%;*/
     height: 900px;
-    width: 650px;
+    width: 500px;
 }
 
 .winner__holder {
@@ -21,8 +21,8 @@
 .matrix__perant {
     background: url(/images/tic_tac_toe.png) no-repeat;
     background-size: cover;
-    height: 650px;
-    width: 650px;
+    height: 500px;
+    width: 500px;
 }
 
 /*Matrix winner lines.*/
