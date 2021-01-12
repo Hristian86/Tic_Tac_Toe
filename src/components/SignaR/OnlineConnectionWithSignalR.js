@@ -43,6 +43,8 @@ export default class OnlineConnectionWithSignalR extends Component {
             currentGameWinner: "",
             challangeChoise: false,
             invatePlayer: false,
+            userWins: 0,
+            opponentWins: 0,
         }
     }
 
@@ -276,20 +278,26 @@ export default class OnlineConnectionWithSignalR extends Component {
         const user = getCookie('user');
         let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
         //console.log("Result from mulyuplayer " + resultStr);
-
+        
         if (resultStr == "END") {
+            let userWin = this.state.userWins;
+            userWin += 1;
             this.setState({
                 gameEnd: true,
                 gameResult: "Winner is " + user,
                 currentGameWinner: user,
+                userWins: userWin,
             })
             //return "END";
         } else if (resultStr == "CPU WIN") {
+            let oppWin = this.state.opponentWins;
+            oppWin += 1;
             this.setState({
                 gameEnd: true,
                 opponentWin: true,
                 gameResult: "Winner is " + this.state.opponent,
                 currentGameWinner: this.state.opponent,
+                opponentWins: oppWin,
             })
             //return "CPU WIN";
         }
@@ -364,7 +372,7 @@ export default class OnlineConnectionWithSignalR extends Component {
             })
         }
 
-        this.checkLogicForEndGameResult();
+        //this.checkLogicForEndGameResult();
 
         this.state.hubConnection.invoke("play", user, this.state.opponent, this.state.opponent, position, this.state.currentGameWinner, this.state.playAgain)
             .catch(err => console.error(err));
@@ -495,6 +503,8 @@ export default class OnlineConnectionWithSignalR extends Component {
                 <button className="btn btn-primary ml-sm-5" onClick={this.setGameMode}>Change game mode</button>*/}
 
                 {this.state?.gameModeChoise ? <Game
+                    opponentWins={this.state.opponentWins}
+                    userWins={this.state.userWins}
                     playAgainHub={this.playAgainHub}
                     setGameMode={this.setGameMode}
                     playMoreGames={this.playMoreGames}

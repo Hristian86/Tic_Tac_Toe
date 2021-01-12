@@ -11,7 +11,7 @@ const userSymbol = "X";
 const cpuSymbol = "Y";
 const winner = [];
 
-const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame, forceReset, gameResult, gameEnd, userTurn, playMoreGames, setGameMode, playAgainHub }) => {
+const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, opponent, resetMultyplayerGame, forceReset, gameResult, gameEnd, userTurn, playMoreGames, setGameMode, playAgainHub, userWins, opponentWins }) => {
     const user = getCookie('user');
     const [{ fetchData }, dispatch] = useStateValue();
     const [gameState, setGameState] = useState({
@@ -121,11 +121,17 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
                     ? <h2 className="winner__holder">{gameResult}</h2>
                     : <h2 className="winner__holder">{gameState?.winner[0]}</h2>}
 
-                <div>
-                    user score: {score?.user}
-                    <br />
-                    cpu score: {score?.cpu}
-                </div>
+                {multyplayer ?
+                    <div>
+                        user score: {userWins}
+                        <br />
+                        opponent score: {opponentWins}
+                    </div>
+                    : <div>
+                        user score: {score?.user}
+                        <br />
+                        cpu score: {score?.cpu}
+                    </div>}
 
                 {multyplayer ? null : <div>
                     <button className="btn btn-success" onClick={Reset}>Reset</button>

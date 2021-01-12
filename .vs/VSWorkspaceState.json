@@ -3,15 +3,14 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\AuthO",
-    "\\src\\components\\ConstantSymbols",
+    "\\src\\components\\BaseUrl",
     "\\src\\components\\Game_TicTacToe_Logic",
-    "\\src\\components\\Game_TicTacToe_Logic\\ResetMatrix",
+    "\\src\\components\\Game_TicTacToe_Logic\\Rows",
     "\\src\\components\\SignaR",
     "\\src\\components\\WinDrawLines",
     "\\src\\Pages",
     "\\src\\Pages\\Home"
   ],
-  "SelectedNode": "\\src\\components\\Game_TicTacToe_Logic\\Game.js",
+  "SelectedNode": "\\src\\components\\SignaR\\OnlineConnectionWithSignalR.js",
   "PreviewInSolutionExplorer": false
 }
