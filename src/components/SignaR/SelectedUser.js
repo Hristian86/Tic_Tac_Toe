@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectedUser = ({ data, index, setSelectedUser, gameModeHandler  }) => {
+const SelectedUser = ({ data, index, setSelectedUser, gameModeHandler, playAgainHub  }) => {
     const select = () => {
         //setSelectedUser(data.userName);
         gameModeHandler(true, data.userName);

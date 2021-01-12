@@ -5,7 +5,7 @@ import SelectedUser from './SelectedUser';
 import getCookie from '../Cookies/GetCookie';
 import { Link } from 'react-router-dom';
 
-const GameMode = ({ gameModeHandler }) => {
+const GameMode = ({ gameModeHandler, playAgainHub }) => {
     const user = getCookie('user');
 
     const [onlineUserList, setOnlineUserList] = useState({
@@ -68,6 +68,7 @@ const GameMode = ({ gameModeHandler }) => {
 
                     {onlineUserList?.users?.map((data, index) => {
                         return <SelectedUser
+                            playAgainHub={playAgainHub}
                             gameModeHandler={gameModeHandler}
                             key={index}
                             setSelectedUser={setSelectedUser}

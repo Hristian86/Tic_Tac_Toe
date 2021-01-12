@@ -42,6 +42,7 @@ export default class OnlineConnectionWithSignalR extends Component {
             gameModeChoise: false,
             currentGameWinner: "",
             challangeChoise: false,
+            invatePlayer: false,
         }
     }
 
@@ -101,6 +102,42 @@ export default class OnlineConnectionWithSignalR extends Component {
             // Ask to play again.
             this.state.hubConnection.on("playAgain", (player1, player2, p1Accept, p2Accept) => {
                 this.playAgainResultUpdate(player1, player2, p1Accept, p2Accept);
+
+            });
+
+            // Invite.
+            this.state.hubConnection.on("Invite", (player1, player2, p1Accept, p2Accept, options) => {
+
+                if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invited") {
+                    this.setState({
+                        invitePlayer: false,
+                    })
+                }
+
+                if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invite" && p2Accept.length === 0) {
+
+                    const answer = window.confirm(`New challenge from ${player1}`);
+                    if (answer) {
+                        //some code
+
+                        this.gameModeHandler(true, player1);
+                        this.setState({
+                            invitePlayer: true,
+                        })
+
+                        this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _accept, "invited")
+                            .catch(err => console.log(err));
+                    }
+                    else {
+                        //some code
+                        this.setState({
+                            invitePlayer: false,
+                        })
+
+                        this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _decline, "decline")
+                            .catch(err => console.log(err));
+                    }
+                }
 
             });
 
@@ -166,6 +203,11 @@ export default class OnlineConnectionWithSignalR extends Component {
         //console.log(p1Accept);
         //console.log(p2Accept);
 
+        if (player2 === this.state.opponent && p2Accept === _decline) {
+            document.getElementById("playAgain").style.display = "inline-block";
+            document.getElementById("waiting").innerHTML = "Declined.";
+        }
+
         if ((player1 === user || (player2 === user) && (player1 === this.state.opponent || player2 === this.state.opponent))
             && p1Accept === _accept && p2Accept === _accept) {
 
@@ -196,9 +238,13 @@ export default class OnlineConnectionWithSignalR extends Component {
                     //some code
                     this.state.hubConnection.invoke("playAgain", player1, player2, p1Accept, _decline)
                         .catch(err => console.log(err));
-                    //this.setState({
-                    //    challangeChoise: true,
-                    //})
+                    this.setState({
+                        challangeChoise: true,
+
+                    })
+
+                    document.getElementById("playAgain").style.display = "inline-block";
+                    document.getElementById("waiting").innerHTML = "Declined.";
 
                 }
             }
@@ -335,6 +381,7 @@ export default class OnlineConnectionWithSignalR extends Component {
     };
 
     playAgainHub = () => {
+
         document.getElementById("playAgain").style.display = "none";
         document.getElementById("waiting").innerHTML = "Waiting for responce";
 
@@ -344,6 +391,14 @@ export default class OnlineConnectionWithSignalR extends Component {
 
     }
 
+    inviteToPlay = () => {
+        setTimeout(() => {
+
+            const user = getCookie('user');
+            this.state.hubConnection.invoke("invite", user, this.state.opponent, "yes", "", "invite")
+                .catch(err => console.log(err));
+        }, 100);
+    }
 
     // Chat messages
     sendMessage = (e) => {
@@ -386,6 +441,11 @@ export default class OnlineConnectionWithSignalR extends Component {
                 gameModeChoise: true,
                 opponent: selectedUser,
             })
+
+            setTimeout(() => {
+                this.inviteToPlay();
+            }, 200);
+
         } else {
             this.setState({
                 multyplayer: false,
@@ -451,6 +511,7 @@ export default class OnlineConnectionWithSignalR extends Component {
                     Play={this.Play}
                 />
                     : <GameMode
+                        playAgainHub={this.playAgainHub}
                         gameModeHandler={this.gameModeHandler}
                     />}
 

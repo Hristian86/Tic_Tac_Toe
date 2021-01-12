@@ -87,6 +87,7 @@ export default class Home extends Component {
                     </OnlineConnectionWithSignalR>
                 </div>
 
+
                 <div className="spacer"></div>
             </div>
         )
