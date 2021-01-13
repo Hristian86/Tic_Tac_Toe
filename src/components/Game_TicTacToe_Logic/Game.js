@@ -5,6 +5,7 @@ import ResetMatrix from './ResetMatrix/ResetMatrix';
 import { useStateValue } from '../../components/ContextApi/StateProvider';
 import { useEffect } from 'react';
 import getCookie from '../../components/Cookies/GetCookie';
+import PopUpComponent from '../PopUp/PopUpComponent';
 
 const startField = "0";
 const userSymbol = "X";
@@ -96,7 +97,8 @@ const Game = ({ Play, positionParametars, matrix, multyplayer, opponentWin, oppo
 
                 <div className="">
 
-                    <div id="waiting"></div>
+                    <PopUpComponent />
+
 
                     {multyplayer ?
                         <div id="playAgain" className="btn btn-success" onClick={playAgainHub}>Play again</div>

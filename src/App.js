@@ -21,62 +21,35 @@ import getCookie from './components/Cookies/GetCookie';
 import setCookie from './components/Cookies/SetCookie';
 import url from './components/BaseUrl/BaseUrl';
 import NotFound from './Pages/NotFoundPage/NotFount';
+import * as signalR from '@aspnet/signalr';
+import { INSERT_HUB_CONNECTION } from './components/ContextApi/Types';
+
 
 //import PrivateRoute from './components/Auth/PrivateRoute';
 const App = () => {
+     const [hubConnection, setHubConnection] = useState();
 
-    //const [state, setState] = useState({});
-    //const [state1, setState1] = useState({});
-    //const [{ fetchData }, { user }, dispatch] = useStateValue();
+    useEffect(() => {
+        let hubConnection1 = new signalR.HubConnectionBuilder()
+            .withUrl(url("message"))
+            .build();
 
-    //useEffect(() => {
-    //    const getData = async () => {
-    //        const result = await authListener("categoriesApi");
-    //        if (result) {
-    //            setState1({
-    //                data: result
-    //            });
-    //        }
-    //    }
-    //    getData();
-    //}, []);
+        setHubConnection(hubConnection1);
 
-    //const addUser = () => {
-    //    dispatch({
-    //        type: 'CHEK_USER',
-    //        user: {},
-    //    })
-    //}
+    }, [])
 
-    //const authListener = async (apiController) => {
-    //    const user = getCookie('user');
-    //    if (user) {
-    //        setState({
-    //            user: user
-    //        });
-    //    } else {
-    //        setState({
-    //            user: null
-    //        });
-    //    }
+    useEffect(() => {
+        if (hubConnection) {
+            hubConnection.start()
+                .then(result => {
+                    console.log('Connected!');
 
-    //    const token = getCookie('token');
-    //    const result = await fetch(url(apiController),
-    //        {
-    //            "headers": {
-    //                'Accept': 'application/json',
-    //                'Content-Type': 'application/json',
-    //                'Authorization': `Bearer ${token}`
-    //            }
-    //        }
-    //    )
-    //        .then(data => data.json())
-    //        .catch(err => console.log(err));
+                })
+                .catch(e => console.log('Connection failed: ', e));
+        }
 
-    //    return result;
-    //}
-    //console.log(state);
-    //console.log(state1);
+    }, [hubConnection])
+
 
 
     return <div className="App">
@@ -88,7 +61,10 @@ const App = () => {
 
                     <Switch>
 
-                        <Route exact path="/" component={Home}>
+                        <Route exact path="/" >
+                            <Home
+                                hubConnection={hubConnection}
+                            />
                         </Route>
 
 
@@ -110,39 +86,3 @@ const App = () => {
     </div>
 }
 export default App;
-
-//const PrivateRoute = ({ component: Component, ...rest }) => {
-//    var resut = authListener();
-//    var rs = { ...rest };
-//    var chek = false;
-//    resut.then(res => res);
-//    setTimeout(() => {
-//        console.log(useraaa);
-//        if (useraaa.email !== undefined) {
-//            return <Route {...rest} render={(props) => (
-//                chek ? <Component {...props} /> : <Redirect to="/Auth/LogIn" />
-//            )
-//            } />
-//        }
-//    }, 1000);
-
-//    if (rs !== undefined) {
-//        chek = true;
-//    }
-
-//    return <Route {...rest} render={(props) => (
-//        chek ? <Component {...props} /> : <Redirect to="/Auth/LogIn" />
-//    )
-//    } />
-//}
-
-//async function authListener() {
-//    let chek = false;
-//    const users = await fire.auth().onAuthStateChanged(user => {
-//        if (user) {
-//            chek = true;
-//        } else {
-//        }
-//    });
-//    return chek;
-//}

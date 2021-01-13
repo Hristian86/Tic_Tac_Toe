@@ -5,7 +5,7 @@ import SelectedUser from './SelectedUser';
 import getCookie from '../Cookies/GetCookie';
 import { Link } from 'react-router-dom';
 
-const GameMode = ({ gameModeHandler, playAgainHub }) => {
+const GameMode = ({ gameModeHandler, playAgainHub, hubConnection }) => {
     const user = getCookie('user');
 
     const [onlineUserList, setOnlineUserList] = useState({
@@ -16,20 +16,36 @@ const GameMode = ({ gameModeHandler, playAgainHub }) => {
     const [multiOption, setMultiOption] = useState(false);
 
     useEffect(() => {
-        const getData = async () => {
-            const result = await FetchData("api/getUsers", null, "GET");
-            if (result.error || result.errors) {
+        //const getData = async () => {
+        //    const result = await FetchData("api/getUsers", null, "GET");
+        //    if (result.error || result.errors) {
 
-            } else {
-                console.log(result);
-                setOnlineUserList({
-                    users: result
-                })
+        //    } else {
+        //        console.log(result);
+        //        setOnlineUserList({
+        //            users: result
+        //        })
+        //    }
+        //}
+
+        if (hubConnection !== undefined) {
+            if (hubConnection.connectionState === 1) {
+
+                hubConnection.invoke("OnlineUsers", user)
+                    .catch(err => console.log(err));
+
+                hubConnection.on("OnlineUsers", (users) => {
+                    setOnlineUserList({
+                        users: Object.entries(users)
+                    })
+                    console.log(users);
+                });
+
             }
         }
 
-        getData();
-    }, [])
+        //getData();
+    }, [hubConnection])
 
     const singlePlayer = () => {
         gameModeHandler(false, null);
@@ -51,7 +67,11 @@ const GameMode = ({ gameModeHandler, playAgainHub }) => {
             >MultiPlayer</button>
                 : <Link
                     to="/AuthO/LogIn"
-                ><em className="btn btn-warning ml-2">Please lof in to have online experience</em></Link>}
+                ><em
+                        className="btn btn-warning ml-2"
+                    >Please log in to have online experience
+                        </em>
+                </Link>}
 
         </div>
 

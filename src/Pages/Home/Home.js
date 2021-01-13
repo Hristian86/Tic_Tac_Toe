@@ -76,11 +76,13 @@ export default class Home extends Component {
     render() {
         //let usr = this.state.user;
         //let fireQuery = new fireDB();
-
+        //console.log(this.props?.hubConnection);
         return (
             <div>
                 <div className="chat__hom">
-                    <OnlineConnectionWithSignalR>
+                    <OnlineConnectionWithSignalR
+                        hubConnection={this.props?.hubConnection}
+                    >
 
                         
 

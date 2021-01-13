@@ -9,6 +9,7 @@ import ResetMatrix from '../Game_TicTacToe_Logic/ResetMatrix/ResetMatrix';
 import CheckForEquals from '../Game_TicTacToe_Logic/Figures/CheckForEquals';
 import FirstLoop from '../Game_TicTacToe_Logic/Figures/FirstLoop';
 import Game from '../Game_TicTacToe_Logic/Game';
+import Invite from '../PopUp/Invite';
 
 const isSymbolAdded = null;
 const cpuSymbol = _cpuSymbol;
@@ -45,6 +46,9 @@ export default class OnlineConnectionWithSignalR extends Component {
             invatePlayer: false,
             userWins: 0,
             opponentWins: 0,
+            setAswer: 0,
+            isAnswered: false,
+            toggleQuestion: false,
         }
     }
 
@@ -74,127 +78,152 @@ export default class OnlineConnectionWithSignalR extends Component {
             }
         }
 
-        let hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(url("message"))
-            .build();
+        setTimeout(() => {
 
-        this.setState({ hubConnection }, () => {
-            this.state.hubConnection
-                .start()
-                .then(() => console.log('Connection started!'))
-                .catch(err => console.log('Error while establishing connection :('));
+            if (this.props?.hubConnection !== undefined) {
 
-            this.state.hubConnection.on("send", (name, message, oppnentName, userTurn, cordinates) => {
+                let hubConnection = this.props?.hubConnection;
 
-                // Messages in the chat.
-                let data = this.state.recevedMessage;
-                //console.log(data);
-                data.push(name + " " + message);
-                this.setState({
-                    recevedMessage: data,
+                this.setState({ hubConnection });
+
+                this.state.hubConnection.on("send", (name, message, oppnentName, userTurn, cordinates) => {
+
+                    // Messages in the chat.
+                    let data = this.state.recevedMessage;
+                    //console.log(data);
+                    data.push(name + " " + message);
+                    this.setState({
+                        recevedMessage: data,
+                    });
+
                 });
 
-            });
+                // To do make random user turn whe the game start for first time.
+                this.state.hubConnection.on("turn", (turn) => {
 
-            // To do make random user turn whe the game start for first time.
-            this.state.hubConnection.on("turn", (turn) => {
+                });
 
-            });
+                // Ask to play again.
+                this.state.hubConnection.on("playAgain", (player1, player2, p1Accept, p2Accept) => {
+                    this.playAgainResultUpdate(player1, player2, p1Accept, p2Accept);
 
-            // Ask to play again.
-            this.state.hubConnection.on("playAgain", (player1, player2, p1Accept, p2Accept) => {
-                this.playAgainResultUpdate(player1, player2, p1Accept, p2Accept);
+                });
 
-            });
+                // Invite.
+                this.state.hubConnection.on("Invite", (player1, player2, p1Accept, p2Accept, options) => {
 
-            // Invite.
-            this.state.hubConnection.on("Invite", (player1, player2, p1Accept, p2Accept, options) => {
-
-                if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invited") {
-                    this.setState({
-                        invitePlayer: false,
-                    })
-                }
-
-                if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invite" && p2Accept.length === 0) {
-
-                    const answer = window.confirm(`New challenge from ${player1}`);
-                    if (answer) {
-                        //some code
-
-                        this.gameModeHandler(true, player1);
-                        this.setState({
-                            invitePlayer: true,
-                        })
-
-                        this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _accept, "invited")
-                            .catch(err => console.log(err));
-                    }
-                    else {
-                        //some code
+                    if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invited") {
                         this.setState({
                             invitePlayer: false,
                         })
-
-                        this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _decline, "decline")
-                            .catch(err => console.log(err));
                     }
-                }
 
-            });
+                    if (user === player2 && p1Accept === _accept && !this.state.invitePlayer && options === "invite" && p2Accept.length === 0) {
 
-            this.state.hubConnection.on("play", (name, oppnentName, userTurn, cordinates, endGameWinner, playAgain) => {
-                //console.log(playAgain);
-                console.log(endGameWinner);
-                //console.log("User turn => " + userTurn);
-                if (user == userTurn) {
-                    this.setState({
-                        gameEnd: false,
-                    })
-                } else {
-                    this.setState({
-                        gameEnd: true,
-                    })
-                }
+                        
 
-                this.setState({
-                    userTurn: userTurn,
-                })
+                        //if (!this.state.isAnswered) {
+                        //    this.setState({
+                        //        toggleQuestion: true,
+                        //    })
 
-                //console.log("User turn is " + userTurn);
-                // Here is play again.
-                if (playAgain === "yes") {
-                    this.playAgainResetState();
-                }
+                            
 
-                // if opponent name equal current name.
-                if (oppnentName == this.state.currentUser && !this.state.gameEnd && this.state.multyplayer) {
-
-                    this.setState({
-                        positionParametars: cordinates,
-                    })
+                        //    setTimeout(() => {
+                        //        this.setState({
+                        //            toggleQuestion: false,
+                        //        })
+                        //    }, 15000);
 
 
-                    // Fixing this thing for impruvments.
-                    if (name.length > 1 && cordinates.length > 2) {
-                        const position = cordinates.split(", ");
-                        const matrix = this.state.matrix;
-                        matrix[position[0]][position[1]] = cpuSymbol;
+
+                        //    setTimeout(() => {
+                        //        this.setState({
+                        //            isAnswered: false,
+                        //        })
+                        //    }, 15000);
+                        //}
+
+
+                        const answer = window.confirm(`New challenge from ${player1}`);
+                        if (answer) {
+                            //some code
+
+                            this.gameModeHandler(true, player1);
+                            this.setState({
+                                invitePlayer: true,
+                            })
+
+                            this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _accept, "invited")
+                                .catch(err => console.log(err));
+                        }
+                        else {
+                            //some code
+                            this.setState({
+                                invitePlayer: false,
+                            })
+
+                            this.state.hubConnection.invoke("invite", user, this.state.opponent, p1Accept, _decline, "decline")
+                                .catch(err => console.log(err));
+                        }
+                    }
+
+                });
+
+                this.state.hubConnection.on("play", (name, oppnentName, userTurn, cordinates, endGameWinner, playAgain) => {
+                    //console.log(playAgain);
+                    console.log(endGameWinner);
+                    //console.log("User turn => " + userTurn);
+                    if (user == userTurn) {
                         this.setState({
-                            matrix: matrix,
+                            gameEnd: false,
+                        })
+                    } else {
+                        this.setState({
+                            gameEnd: true,
                         })
                     }
 
-                    console.log("Opponent winner" + endGameWinner);
+                    this.setState({
+                        userTurn: userTurn,
+                    })
 
-                    //console.log("Play again " + playAgain);
-                }
+                    //console.log("User turn is " + userTurn);
+                    // Here is play again.
+                    if (playAgain === "yes") {
+                        this.playAgainResetState();
+                    }
 
-                this.checkLogicForEndGameResult();
+                    // if opponent name equal current name.
+                    if (oppnentName == this.state.currentUser && !this.state.gameEnd && this.state.multyplayer) {
 
-            });
+                        this.setState({
+                            positionParametars: cordinates,
+                        })
 
-        });
+
+                        // Fixing this thing for impruvments.
+                        if (name.length > 1 && cordinates.length > 2) {
+                            const position = cordinates.split(", ");
+                            const matrix = this.state.matrix;
+                            matrix[position[0]][position[1]] = cpuSymbol;
+                            this.setState({
+                                matrix: matrix,
+                            })
+                        }
+
+                        console.log("Opponent winner" + endGameWinner);
+
+                        //console.log("Play again " + playAgain);
+                    }
+
+                    this.checkLogicForEndGameResult();
+
+                });
+
+            }
+
+        }, 1000)
     }
 
     playAgainResultUpdate(player1, player2, p1Accept, p2Accept) {
@@ -225,6 +254,8 @@ export default class OnlineConnectionWithSignalR extends Component {
         } else {
 
             if ((user === player2 && user !== player1) && !this.state.challangeChoise && p2Accept !== _accept) {
+
+
 
                 const answer = window.confirm(`New challenge from ${player1}`);
                 if (answer) {
@@ -278,7 +309,7 @@ export default class OnlineConnectionWithSignalR extends Component {
         const user = getCookie('user');
         let resultStr = FirstLoop(this.state.matrix, cpuSymbol, userSymbol, isSymbolAdded);
         //console.log("Result from mulyuplayer " + resultStr);
-        
+
         if (resultStr == "END") {
             let userWin = this.state.userWins;
             userWin += 1;
@@ -413,12 +444,14 @@ export default class OnlineConnectionWithSignalR extends Component {
         e.preventDefault();
 
         const userName = getCookie('user');
-        const opponent = "Admin1";
 
-        this.state.hubConnection.invoke("send", userName, this.state.message, opponent, userName, "1, 1")
-            .catch(err => console.error(err));
+        if (this.state.message.length > 0) {
 
-        this.setState({ message: '' });
+            this.state.hubConnection.invoke("send", userName, this.state.message, this.state.opponent, userName, "1, 1")
+                .catch(err => console.error(err));
+
+            this.setState({ message: '' });
+        }
     };
 
     opponentHandler = (e) => {
@@ -458,6 +491,19 @@ export default class OnlineConnectionWithSignalR extends Component {
             this.setState({
                 multyplayer: false,
                 gameModeChoise: true,
+            })
+        }
+    }
+
+    answerChoise = (option) => {
+
+        if (option === 2) {
+            this.setState({
+                setAswer: 2,
+            })
+        } else if (option === 1) {
+            this.setState({
+                setAswer: 1,
             })
         }
     }
@@ -521,9 +567,14 @@ export default class OnlineConnectionWithSignalR extends Component {
                     Play={this.Play}
                 />
                     : <GameMode
+                        hubConnection={this.state?.hubConnection}
                         playAgainHub={this.playAgainHub}
                         gameModeHandler={this.gameModeHandler}
                     />}
+
+                {/*{this.state.toggleQuestion ? <Invite
+                    answerChoise={this.answerChoise}
+                /> : null}*/}
 
                 {this.props.children}
                 <div></div>
